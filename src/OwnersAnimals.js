@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-export default class LocationList extends Component {
+export default class OwnersAnimalsList extends Component {
     render() {
         return (
             <React.Fragment>
                 {
-                    this.props.locations.map(location =>
+                    this.props.ownersAnimals.map(ownerAnimal =>
                         <div>
-                            {location.name}
+                            {ownerAnimal.name}
                         </div>
                     )
                 }
