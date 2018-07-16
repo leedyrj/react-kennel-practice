@@ -1,24 +1,45 @@
 import React, { Component } from "react"
-
+import Location from "./Location"
 
 export default class LocationList extends Component {
     state = {
-        locations: [
-            { id: 1, name: "Nashville North" },
-            { id: 2, name: "Nashville South" },
-            { id: 3, name: "Nashville West" }
-        ]
+        locations: []
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:5002/locations")
+            .then(e => e.json())
+            .then(locations => this.setState({ locations: locations }))
+    }
+
+    checkOutLocation = (locationId) => {
+        fetch(`http://localhost:5002/locations/${locationId}`, {
+            method: "DELETE"
+        })
+            .then(() => {
+                return fetch("http://localhost:5002/locations")
+            })
+            .then(a => a.json())
+            .then(locationList => {
+                this.setState({
+                    locations: locationList
+                })
+            })
     }
 
     render() {
         return (
             <React.Fragment>
-                <ul>
-                    {
-                        this.state.locations.map(location =>
-                            <li key={location.id}>{location.name}</li>)
-                    }
-                </ul>
+                {
+                    <ul>
+                        {
+                            this.state.locations.map(location => <Location key={location.id} location={location} checkOutLocation={this.checkOutLocation}>
+                                {location.name}
+                            </Location>
+                            )
+                        }
+                    </ul>
+                }
             </React.Fragment>
         )
     }
