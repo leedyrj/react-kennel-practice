@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import Owner from "./Owner.js"
+import apiController from "./apiController.js";
 
 export default class OwnerList extends Component {
     state = {
@@ -7,9 +8,10 @@ export default class OwnerList extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:5002/owners")
-            .then(e => e.json())
-            .then(owners => this.setState({ owners: owners }))
+        apiController.getAllOwners()
+            .then(owners => this.setState({
+                owners: owners
+            }))
     }
 
     checkOutOwner = (ownerId) => {
@@ -30,11 +32,14 @@ export default class OwnerList extends Component {
         return (
             <React.Fragment>
                 {
-                    this.state.owners.map(owner =>
-                        <Owner key={owner.id} owner={owner} checkOutOwner={this.checkOutOwner}>
-                            {owner.name}
-                        </Owner>
-                    )
+                    <ul>
+                        {
+                            this.state.owners.map(owner => <Owner key={owner.id} owner={owner} checkOutOwner={this.checkOutOwner}>
+                                {owner.name}
+                            </Owner>
+                            )
+                        }
+                    </ul>
                 }
             </React.Fragment>
         )
